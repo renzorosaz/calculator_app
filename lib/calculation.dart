@@ -121,7 +121,15 @@ class _CalculationState extends State<Calculation> {
     setState(() {
       if (operator == 'x') {
         resultCalculator = (num1 * num2!).toString();
+      } else if (operator == '-') {
+        resultCalculator = (num1 - num2!).toString();
+      } else if (operator == '+') {
+        resultCalculator = (num1 + num2!).toString();
+      } else if (operator == '/') {
+        resultCalculator = (num1 / num2!).toString();
       }
+
+      //division
     });
   }
 
