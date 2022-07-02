@@ -1,4 +1,6 @@
 import 'package:calculator_app/calculator_button.dart';
+import 'package:calculator_app/calculator_histories.dart';
+import 'package:calculator_app/calculator_history.dart';
 import 'package:calculator_app/result_display.dart';
 import 'package:flutter/material.dart';
 
@@ -11,11 +13,20 @@ class Calculation extends StatefulWidget {
 
 class _CalculationState extends State<Calculation> {
   late double width;
+  late double height;
   String resultCalculator = "0";
   late double num1;
   String operator = "";
 
-  List<String> history = [];
+  List<String> lstStringHistory = [];
+
+  History history =
+      History(num1: 0, num2: 2, operation: '+', resultCalculator: '2');
+
+  History history2 =
+      History(num1: 44, num2: 2, operation: '-', resultCalculator: '42');
+
+  List<History>? lstHistories = [];
 
   @override
   void initState() {
@@ -24,6 +35,7 @@ class _CalculationState extends State<Calculation> {
 
   @override
   void didChangeDependencies() {
+    height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     super.didChangeDependencies();
   }
@@ -100,12 +112,19 @@ class _CalculationState extends State<Calculation> {
           ],
         ),
         SizedBox(height: width * 0.02),
-        // Expanded(
-        //   child: ListView(
-        //     padding: const EdgeInsets.only(left: 190, top: 80),
-        //     children: [for (String item in history) Text('${item}')],
-        //   ),
-        // )
+        Divider(
+          color: Colors.black,
+          height: height * 0.04,
+        ),
+        CalculatorHistory(
+          width: width,
+          height: height,
+          result: history,
+        ),
+        lstHistories!.isNotEmpty
+            ? Text(
+                '${lstHistories!.last.num1} ${lstHistories!.last.operation} ${lstHistories!.last.num2} = ${lstHistories!.last.resultCalculator}')
+            : Text("No registros")
       ],
     ));
   }
@@ -118,16 +137,32 @@ class _CalculationState extends State<Calculation> {
 
   void obtainResult() {
     double? num2 = double.tryParse(resultCalculator);
+    print(lstHistories!.last);
     setState(() {
       if (operator == 'x') {
-        resultCalculator = (num1 * num2!).toString();
+        lstHistories!.last.num2 = num2;
+        lstHistories!.last.resultCalculator =
+            (lstHistories!.last.num1 * lstHistories!.last.num2!).toString();
+        resultCalculator = lstHistories!.last.resultCalculator!;
       } else if (operator == '-') {
-        resultCalculator = (num1 - num2!).toString();
+        lstHistories!.last.num2 = num2;
+        lstHistories!.last.resultCalculator =
+            (lstHistories!.last.num1 - lstHistories!.last.num2!).toString();
+        resultCalculator = lstHistories!.last.resultCalculator!;
       } else if (operator == '+') {
-        resultCalculator = (num1 + num2!).toString();
+        lstHistories!.last.num2 = num2;
+        lstHistories!.last.resultCalculator =
+            (lstHistories!.last.num1 + lstHistories!.last.num2!).toString();
+        resultCalculator = lstHistories!.last.resultCalculator!;
       } else if (operator == '/') {
-        resultCalculator = (num1 / num2!).toString();
+        lstHistories!.last.num2 = num2;
+        lstHistories!.last.resultCalculator =
+            (lstHistories!.last.num1 / lstHistories!.last.num2!).toString();
+        resultCalculator = lstHistories!.last.resultCalculator!;
       }
+      //lstStringHistory.last += "$num2 = " + resultCalculator;
+
+      // print(lstStringHistory.last);
 
       //division
     });
@@ -136,7 +171,9 @@ class _CalculationState extends State<Calculation> {
   operatorPressed(String op) {
     num1 = double.tryParse(resultCalculator)!;
     operator = op;
-    //history.add(num1.toString() + " " + op);
+    lstHistories!.add(History(num1: num1, operation: operator));
+    print(lstHistories);
+    //lstStringHistory.add(num1.toString() + "" + op);
     clean();
   }
 
