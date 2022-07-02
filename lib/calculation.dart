@@ -12,6 +12,10 @@ class Calculation extends StatefulWidget {
 class _CalculationState extends State<Calculation> {
   late double width;
   String resultCalculator = "0";
+  late double num1;
+  String operator = "";
+
+  List<String> history = [];
 
   @override
   void initState() {
@@ -44,7 +48,10 @@ class _CalculationState extends State<Calculation> {
               onTap: () => numberPressed(9),
               text: '9',
             ),
-            _getButton(onTap: () {}, text: 'x', backgroundColor: Colors.grey),
+            _getButton(
+                onTap: operatorPressed("x"),
+                text: 'x',
+                backgroundColor: Colors.grey),
           ],
         ),
         Row(
@@ -54,7 +61,7 @@ class _CalculationState extends State<Calculation> {
             _getButton(text: '6', onTap: () => numberPressed(6)),
             _getButton(
               text: '/',
-              onTap: () {},
+              onTap: operatorPressed("/"),
               backgroundColor: const Color.fromRGBO(220, 220, 220, 1),
             ),
           ],
@@ -66,7 +73,7 @@ class _CalculationState extends State<Calculation> {
             _getButton(text: '3', onTap: () => numberPressed(3)),
             _getButton(
               text: '+',
-              onTap: () {},
+              onTap: operatorPressed("+"),
               backgroundColor: const Color.fromRGBO(220, 220, 220, 1),
             )
           ],
@@ -75,7 +82,7 @@ class _CalculationState extends State<Calculation> {
           children: [
             _getButton(
               text: '=',
-              onTap: () {},
+              onTap: () => obtainResult(),
               backgroundColor: Colors.orange,
               textColor: Colors.white,
             ),
@@ -87,19 +94,36 @@ class _CalculationState extends State<Calculation> {
             ),
             _getButton(
               text: '-',
-              onTap: () {},
+              onTap: operatorPressed("-"),
               backgroundColor: const Color.fromRGBO(220, 220, 220, 1),
             ),
           ],
         ),
+        SizedBox(height: width * 0.02),
+        // Expanded(
+        //   child: ListView(
+        //     padding: const EdgeInsets.only(left: 190, top: 80),
+        //     children: [for (String item in history) Text('${item}')],
+        //   ),
+        // )
       ],
     ));
   }
 
   clean() {
-    setState(() {
-      resultCalculator = 0.toString();
-    });
+    setState(() {});
+  }
+
+  void obtainResult() {
+    double? num2 = double.tryParse(resultCalculator);
+    setState(() {});
+  }
+
+  operatorPressed(String op) {
+    num1 = double.tryParse(resultCalculator)!;
+    operator = op;
+    history.add(num1.toString() + " " + op);
+    clean();
   }
 
   numberPressed(int value) {
