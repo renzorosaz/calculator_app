@@ -49,7 +49,7 @@ class _CalculationState extends State<Calculation> {
               text: '9',
             ),
             _getButton(
-                onTap: operatorPressed("x"),
+                onTap: () => operatorPressed("x"),
                 text: 'x',
                 backgroundColor: Colors.grey),
           ],
@@ -61,7 +61,7 @@ class _CalculationState extends State<Calculation> {
             _getButton(text: '6', onTap: () => numberPressed(6)),
             _getButton(
               text: '/',
-              onTap: operatorPressed("/"),
+              onTap: () => operatorPressed("/"),
               backgroundColor: const Color.fromRGBO(220, 220, 220, 1),
             ),
           ],
@@ -73,7 +73,7 @@ class _CalculationState extends State<Calculation> {
             _getButton(text: '3', onTap: () => numberPressed(3)),
             _getButton(
               text: '+',
-              onTap: operatorPressed("+"),
+              onTap: () => operatorPressed("+"),
               backgroundColor: const Color.fromRGBO(220, 220, 220, 1),
             )
           ],
@@ -94,7 +94,7 @@ class _CalculationState extends State<Calculation> {
             ),
             _getButton(
               text: '-',
-              onTap: operatorPressed("-"),
+              onTap: () => operatorPressed("-"),
               backgroundColor: const Color.fromRGBO(220, 220, 220, 1),
             ),
           ],
@@ -110,19 +110,25 @@ class _CalculationState extends State<Calculation> {
     ));
   }
 
-  clean() {
-    setState(() {});
+  void clean() {
+    setState(() {
+      resultCalculator = "0";
+    });
   }
 
   void obtainResult() {
     double? num2 = double.tryParse(resultCalculator);
-    setState(() {});
+    setState(() {
+      if (operator == 'x') {
+        resultCalculator = (num1 * num2!).toString();
+      }
+    });
   }
 
   operatorPressed(String op) {
     num1 = double.tryParse(resultCalculator)!;
     operator = op;
-    history.add(num1.toString() + " " + op);
+    //history.add(num1.toString() + " " + op);
     clean();
   }
 
