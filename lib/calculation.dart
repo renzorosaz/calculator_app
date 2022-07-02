@@ -161,10 +161,6 @@ class _CalculationState extends State<Calculation> {
         resultCalculator = lstHistories!.last.resultCalculator!;
       }
       //lstStringHistory.last += "$num2 = " + resultCalculator;
-
-      // print(lstStringHistory.last);
-
-      //division
     });
   }
 
