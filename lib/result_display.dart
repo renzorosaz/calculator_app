@@ -26,7 +26,7 @@ class _ResultDisplayState extends State<ResultDisplay> {
             padding: const EdgeInsets.only(right: 24, bottom: 24),
             child: Text(
               widget.text,
-              style: TextStyle(color: Colors.white, fontSize: 34),
+              style: const TextStyle(color: Colors.white, fontSize: 34),
             )));
   }
 }

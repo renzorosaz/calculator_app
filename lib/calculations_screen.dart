@@ -23,29 +23,16 @@ class _CalculationState extends State<Calculation> {
   History history =
       History(num1: 0, num2: 2, operation: '+', resultCalculator: '2');
 
-  History history2 =
-      History(num1: 44, num2: 2, operation: '-', resultCalculator: '42');
-
-  List<History>? lstHistories = [];
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    height = MediaQuery.of(context).size.height;
-    width = MediaQuery.of(context).size.width;
-    super.didChangeDependencies();
-  }
+  List<History> lstHistories = [];
 
   @override
   Widget build(BuildContext context) {
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
     return Container(
         child: Column(
       children: [
-        ResultDisplay(text: resultCalculator),
+        ResultDisplay(text: double.parse(resultCalculator).toStringAsFixed(2)),
         Row(
           children: [
             _getButton(
@@ -111,20 +98,16 @@ class _CalculationState extends State<Calculation> {
             ),
           ],
         ),
-        SizedBox(height: width * 0.02),
+        SizedBox(height: width * 0.01),
         Divider(
           color: Colors.black,
-          height: height * 0.04,
+          height: height * 0.02,
         ),
         CalculatorHistory(
-          width: width,
-          height: height,
-          result: history,
-        ),
-        lstHistories!.isNotEmpty
-            ? Text(
-                '${lstHistories!.last.num1} ${lstHistories!.last.operation} ${lstHistories!.last.num2} = ${lstHistories!.last.resultCalculator}')
-            : Text("No registros")
+          width: width * 1,
+          height: height * 0.3,
+          result: lstHistories,
+        )
       ],
     ));
   }
@@ -137,39 +120,33 @@ class _CalculationState extends State<Calculation> {
 
   void obtainResult() {
     double? num2 = double.tryParse(resultCalculator);
-    print(lstHistories!.last);
+
     setState(() {
       if (operator == 'x') {
-        lstHistories!.last.num2 = num2;
-        lstHistories!.last.resultCalculator =
-            (lstHistories!.last.num1 * lstHistories!.last.num2!).toString();
-        resultCalculator = lstHistories!.last.resultCalculator!;
+        lstHistories.last.num2 = num2;
+        lstHistories.last.resultCalculator = history.multiply(num1, num2);
+        resultCalculator = lstHistories.last.resultCalculator!;
       } else if (operator == '-') {
-        lstHistories!.last.num2 = num2;
-        lstHistories!.last.resultCalculator =
-            (lstHistories!.last.num1 - lstHistories!.last.num2!).toString();
-        resultCalculator = lstHistories!.last.resultCalculator!;
+        lstHistories.last.num2 = num2;
+        lstHistories.last.resultCalculator = history.rest(num1, num2);
+        resultCalculator = lstHistories.last.resultCalculator!;
       } else if (operator == '+') {
-        lstHistories!.last.num2 = num2;
-        lstHistories!.last.resultCalculator =
-            (lstHistories!.last.num1 + lstHistories!.last.num2!).toString();
-        resultCalculator = lstHistories!.last.resultCalculator!;
+        lstHistories.last.num2 = num2;
+        lstHistories.last.resultCalculator = history.add(num1, num2);
+        resultCalculator = lstHistories.last.resultCalculator!;
       } else if (operator == '/') {
-        lstHistories!.last.num2 = num2;
-        lstHistories!.last.resultCalculator =
-            (lstHistories!.last.num1 / lstHistories!.last.num2!).toString();
-        resultCalculator = lstHistories!.last.resultCalculator!;
+        lstHistories.last.num2 = num2;
+        lstHistories.last.resultCalculator = history.split(num1, num2);
+        resultCalculator = lstHistories.last.resultCalculator!;
       }
-      //lstStringHistory.last += "$num2 = " + resultCalculator;
     });
   }
 
   operatorPressed(String op) {
     num1 = double.tryParse(resultCalculator)!;
     operator = op;
-    lstHistories!.add(History(num1: num1, operation: operator));
-    print(lstHistories);
-    //lstStringHistory.add(num1.toString() + "" + op);
+    lstHistories.add(History(
+        num1: num1, num2: 0, resultCalculator: "0", operation: operator));
     clean();
   }
 
